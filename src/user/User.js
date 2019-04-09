@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import WoofList from '../common/WoofList';
+import HeaderAppBar from '../common/HeaderAppBar';
 
 class User extends Component {
   constructor(props) {
@@ -37,6 +38,7 @@ class User extends Component {
     const { woofArray } = this.state;
     return (
       <div>
+        <HeaderAppBar />
         <WoofList woofArray={woofArray} />
       </div>
     );
