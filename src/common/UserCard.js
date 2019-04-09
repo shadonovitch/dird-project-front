@@ -1,51 +1,78 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import { withRouter } from 'react-router';
 import DefaultPicture from '../DefaultUser.png';
 
-const UserCard = (props) => {
-  const { handle, email, picture } = props;
+class UserCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      picture: '',
+    };
+  }
 
-  const userImage = () => {
+  componentDidMount() {
+    const { handle } = this.props;
+    fetch(`https://dirdapi.chaz.pro/${handle}/picture`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then((responseJson) => {
+        const { pictureB64 } = responseJson;
+        this.setState({ picture: pictureB64 });
+      });
+  }
+
+  userImage() {
+    const { picture } = this.state;
     if (picture) {
       return (
         <img
           src={`data:image/jpeg;base64,${picture}`}
           alt="ProfilePicture"
-          style={{ width: '200px', height: '200px' }}
+          style={{ width: '50px', height: '50px' }}
         />
       );
     }
     return (
       <img
         src={DefaultPicture}
-        style={{ width: '200px', height: '200px' }}
+        style={{ width: '50px', height: '50px' }}
         alt="UserPicture"
       />
     );
-  };
+  }
 
-  return (
-    <div style={{ float: 'left' }}>
-      {userImage()}
-      <Typography variant="h5">
-        {'@'}
-        {handle}
-        <br />
-        {email}
-      </Typography>
-      <Button variant="contained" href="/edit">
-        Edit
-      </Button>
-    </div>
-  );
-};
+
+  render() {
+    const { handle, email, history } = this.props;
+    return (
+      <div aria-hidden onClick={() => history.push(`/${handle}`)}>
+        <div style={{ float: 'left' }}>
+          {this.userImage()}
+        </div>
+        <div style={{ float: 'right', paddingLeft: '20px' }}>
+          <Typography>
+            @
+            {handle}
+          </Typography>
+          <Typography>
+            {email}
+          </Typography>
+        </div>
+      </div>
+    );
+  }
+}
 
 UserCard.propTypes = {
   handle: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
-  picture: PropTypes.string.isRequired,
+  history: PropTypes.shape.isRequired,
 };
 
-export default UserCard;
+export default withRouter(UserCard);

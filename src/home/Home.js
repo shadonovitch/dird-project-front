@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withCookies, Cookies } from 'react-cookie';
-import PropTypes, { instanceOf } from 'prop-types';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import UserCard from '../common/UserCard';
+import UserView from '../common/UserView';
 import WoofForm from '../common/WoofForm';
 import WoofList from '../common/WoofList';
 import store from '../redux/store';
@@ -51,7 +51,7 @@ class Home extends Component {
     return (
       <div>
         <HeaderAppBar />
-        <UserCard picture={pictureB64} handle={handle} email={email} />
+        <UserView picture={pictureB64} handle={handle} email={email} />
         <div style={styles.Content}>
           <WoofForm token={token} />
           <WoofList woofArray={userWoofs} />
@@ -73,7 +73,7 @@ function mapStateToProps(state) {
 }
 
 Home.propTypes = {
-  cookies: instanceOf(Cookies).isRequired,
+  cookies: PropTypes.instanceOf(Cookies).isRequired,
   handle: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   pictureB64: PropTypes.string.isRequired,
