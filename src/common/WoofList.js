@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import uniqueid from 'uniqid';
+
 import WoofCard from './WoofCard';
 
 const styles = {
@@ -25,8 +27,8 @@ class WoofList extends Component {
       <div style={styles.WoofList}>
         <List>
           {woofArray.map(item => (
-            <ListItem key={item.id}>
-              <WoofCard key={item.id} handle={item.handle} txt={item.text} />
+            <ListItem key={uniqueid()}>
+              <WoofCard key={uniqueid()} handle={item.handle} txt={item.text} />
             </ListItem>
           ))}
         </List>

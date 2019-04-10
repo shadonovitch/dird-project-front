@@ -62,7 +62,9 @@ function ButtonAppBar(props) {
 }
 
 ButtonAppBar.propTypes = {
-  history: PropTypes.shape.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default withRouter(ButtonAppBar);

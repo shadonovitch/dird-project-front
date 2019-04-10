@@ -1,9 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
-import HeaderAppBar from './HeaderAppBar';
 
 import dirdNotFoundImage from '../assets/dirdnotfound.jpg';
+import HeaderAppBar from './HeaderAppBar';
 
 function NotFound() {
   return (
