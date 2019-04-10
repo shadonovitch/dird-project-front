@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField/TextField';
 import Button from '@material-ui/core/Button/Button';
 import { Redirect } from 'react-router';
-import HeaderAppBar from '../common/HeaderAppBar';
 import { fetchProfile, fetchProfilePicture } from '../redux/actions';
 import store from '../redux/store';
 import DefaultPicture from '../DefaultUser.png';
+import HeaderAppBar from '../common/HeaderAppBar';
 
 const styles = {
   container: {

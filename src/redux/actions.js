@@ -10,6 +10,10 @@ export const FETCH_WOOFS_BEGIN = 'FETCH_WOOFS_BEGIN';
 export const FETCH_WOOFS_SUCCESS = 'FETCH_WOOFS_SUCCESS';
 export const FETCH_WOOFS_FAILURE = 'FETCH_WOOFS_FAILURE';
 
+export const FETCH_SEARCH_BEGIN = 'FETCH_SEARCH_BEGIN';
+export const FETCH_SEARCH_SUCCESS = 'FETCH_SEARCH_SUCCESS';
+export const FETCH_SEARCH_FAILURE = 'FETCH_SEARCH_FAILURE';
+
 export const fetchProfileBegin = () => ({
   type: FETCH_PROFILE_BEGIN,
 });
@@ -49,6 +53,20 @@ export const fetchWoofsSuccess = woofArray => ({
 
 export const fetchWoofsFailure = error => ({
   type: FETCH_WOOFS_FAILURE,
+  payload: { error },
+});
+
+export const fetchSearchBegin = () => ({
+  type: FETCH_SEARCH_BEGIN,
+});
+
+export const fetchSearchSuccess = searchResults => ({
+  type: FETCH_SEARCH_SUCCESS,
+  payload: { searchResults },
+});
+
+export const fetchSearchFailure = error => ({
+  type: FETCH_SEARCH_FAILURE,
   payload: { error },
 });
 
@@ -105,5 +123,22 @@ export function fetchProfilePicture(token) {
         const { pictureB64 } = responseJson;
         dispatch(fetchProfilePictureSuccess(pictureB64));
       }).catch(error => dispatch(fetchProfilePictureFailure(error)));
+  };
+}
+
+export function fetchSearch(token, query) {
+  return (dispatch) => {
+    dispatch(fetchSearchBegin());
+    fetch(`https://dirdapi.chaz.pro/users?handle=${query}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(response => response.json())
+      .then((responseJson) => {
+        dispatch(fetchSearchSuccess(responseJson));
+      })
+      .catch(error => dispatch(fetchSearchFailure(error)));
   };
 }

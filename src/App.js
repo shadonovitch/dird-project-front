@@ -21,20 +21,19 @@ const App = () => {
       <Provider store={store}>
         <CookiesProvider>
           <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/auth" component={Authentication} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/edit" component={EditProfile} />
-            <Route exact path="/logout" component={Logout} />
+            <Route exact path="/" render={() => <Home />} />
+            <Route exact path="/auth" render={() => <Authentication />} />
+            <Route exact path="/register" render={() => <Register />} />
+            <Route exact path="/edit" render={() => <EditProfile />} />
             <Route exact path="/search" component={Search} />
-            <Route exact path="/404" component={NotFound} />
-            <Route exact path="/:handle" component={User} />
+            <Route exact path="/logout" render={() => <Logout />} />
+            <Route exact path="/404" render={() => <NotFound />} />
+            <Route exact path="/:handle" render={() => <User />} />
           </Switch>
         </CookiesProvider>
       </Provider>
     </div>
   );
 };
-
 
 export default App;

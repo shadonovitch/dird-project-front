@@ -5,7 +5,11 @@ import {
   FETCH_PROFILE_PICTURE_BEGIN,
   FETCH_PROFILE_PICTURE_SUCCESS,
   FETCH_PROFILE_PICTURE_FAILURE,
-  FETCH_WOOFS_BEGIN, FETCH_WOOFS_SUCCESS, FETCH_WOOFS_FAILURE,
+  FETCH_WOOFS_BEGIN,
+  FETCH_WOOFS_SUCCESS,
+  FETCH_WOOFS_FAILURE,
+  FETCH_SEARCH_BEGIN,
+  FETCH_SEARCH_FAILURE, FETCH_SEARCH_SUCCESS,
 } from './actions';
 
 const initialState = {
@@ -13,6 +17,7 @@ const initialState = {
     handle: '',
     email: '',
   },
+  searchResults: [],
   userWoofs: [],
   pictureB64: '',
   loading: false,
@@ -75,6 +80,22 @@ function rootReducer(state = initialState, action) {
         error: null,
       };
     case FETCH_WOOFS_FAILURE:
+      return {
+        ...state,
+        error: action.payload.error,
+      };
+    case FETCH_SEARCH_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_SEARCH_SUCCESS:
+      return {
+        ...state,
+        searchResults: action.payload.searchResults,
+      };
+    case FETCH_SEARCH_FAILURE:
       return {
         ...state,
         error: action.payload.error,

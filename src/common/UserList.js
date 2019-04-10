@@ -5,7 +5,7 @@ import ListItem from '@material-ui/core/ListItem/ListItem';
 import UserCard from './UserCard';
 
 const styles = {
-  WoofList: {
+  UserList: {
     backgroundColor: '#5ac9dd',
     margin: 'auto',
     width: '40%',
@@ -18,8 +18,11 @@ class UserList extends Component {
 
   render() {
     const { userArray } = this.props;
+    if (userArray === undefined) {
+      return (<div />);
+    }
     return (
-      <div style={styles.WoofList}>
+      <div style={styles.UserList}>
         <List>
           {userArray.map(item => (
             <ListItem key={item.id}>
@@ -34,10 +37,10 @@ class UserList extends Component {
 
 
 UserList.propTypes = {
-  userArray: PropTypes.shape({
+  userArray: PropTypes.arrayOf(PropTypes.shape({
     handle: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
-  }).isRequired,
+  }).isRequired).isRequired,
 };
 
 export default UserList;

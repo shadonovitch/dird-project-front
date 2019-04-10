@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes, { instanceOf } from 'prop-types';
+import PropTypes from 'prop-types';
 import { Cookies, withCookies } from 'react-cookie';
 import queryString from 'query-string';
 import Typography from '@material-ui/core/Typography/Typography';
-import { Redirect } from 'react-router';
-import HeaderAppBar from '../common/HeaderAppBar';
+import { Redirect, withRouter } from 'react-router';
+import { connect } from 'react-redux';
+import store from '../redux/store';
 import UserList from '../common/UserList';
+import { fetchSearch } from '../redux/actions';
+import HeaderAppBar from '../common/HeaderAppBar';
 
 class Search extends Component {
   constructor(props) {
@@ -13,8 +16,6 @@ class Search extends Component {
     const { cookies } = props;
     this.state = {
       token: cookies.get('token') || undefined,
-      query: '',
-      userArray: [],
     };
   }
 
@@ -23,22 +24,14 @@ class Search extends Component {
     const { token } = this.state;
     const values = queryString.parse(location.search);
     this.setState({ query: values.q });
-    fetch(`https://dirdapi.chaz.pro/users?handle=${values.q}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(response => response.json())
-      .then((responseJson) => {
-        this.setState({ userArray: responseJson });
-      }).catch(error => this.setState({ errorMessage: error.message }));
+    store.dispatch(fetchSearch(token, values.q));
   }
 
   render() {
+    const { errorMessage, query, token } = this.state;
     const {
-      query, token, userArray, errorMessage,
-    } = this.state;
+      searchResults,
+    } = this.props;
     if (token === undefined) {
       return (<Redirect to="/auth" />);
     }
@@ -51,16 +44,24 @@ class Search extends Component {
           <Typography variant="h5">{query}</Typography>
         </div>
         <div>
-          <UserList userArray={userArray} />
+          <UserList userArray={searchResults} />
         </div>
       </div>
     );
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    searchResults: state.searchResults,
+    query: state.query,
+  };
+}
+
 Search.propTypes = {
-  cookies: instanceOf(Cookies).isRequired,
+  cookies: PropTypes.instanceOf(Cookies).isRequired,
   location: PropTypes.shape.isRequired,
+  searchResults: PropTypes.shape.isRequired,
 };
 
-export default withCookies(Search);
+export default connect(mapStateToProps)(withCookies(withRouter(Search)));

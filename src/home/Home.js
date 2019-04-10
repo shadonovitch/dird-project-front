@@ -7,8 +7,8 @@ import UserView from '../common/UserView';
 import WoofForm from '../common/WoofForm';
 import WoofList from '../common/WoofList';
 import store from '../redux/store';
-import HeaderAppBar from '../common/HeaderAppBar';
 import { fetchProfile, fetchProfilePicture, fetchUserWoofs } from '../redux/actions';
+import HeaderAppBar from '../common/HeaderAppBar';
 
 const styles = {
   UserCard: {
@@ -76,8 +76,13 @@ Home.propTypes = {
   cookies: PropTypes.instanceOf(Cookies).isRequired,
   handle: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
-  pictureB64: PropTypes.string.isRequired,
-  userWoofs: PropTypes.shape.isRequired,
+  pictureB64: PropTypes.string,
+  userWoofs: PropTypes.arrayOf(PropTypes.shape),
+};
+
+Home.defaultProps = {
+  pictureB64: '',
+  userWoofs: [],
 };
 
 export default withCookies(connect(mapStateToProps)(Home));
