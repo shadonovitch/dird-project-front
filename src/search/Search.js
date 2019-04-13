@@ -7,8 +7,9 @@ import { Redirect, withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import store from '../redux/store';
 import UserList from '../common/UserList';
-import { fetchSearch } from '../redux/actions';
+import { fetchSearchUsers, fetchSearchWoofs } from '../redux/actions';
 import HeaderAppBar from '../common/HeaderAppBar';
+import WoofList from '../common/WoofList';
 
 class Search extends Component {
   constructor(props) {
@@ -24,14 +25,27 @@ class Search extends Component {
     const { token } = this.state;
     const values = queryString.parse(location.search);
     this.setState({ query: values.q });
-    store.dispatch(fetchSearch(token, values.q));
+    if (values.q[0] === '#') {
+      values.q = values.q.substring(1);
+      store.dispatch(fetchSearchWoofs(token, values.q));
+    } else {
+      store.dispatch(fetchSearchUsers(token, values.q));
+    }
+  }
+
+  searchResult() {
+    const { searchUsersResults, searchWoofsResults } = this.props;
+    if (searchUsersResults.length > 0) {
+      return (<UserList userArray={searchUsersResults} />);
+    }
+    if (searchWoofsResults.length > 0) {
+      return (<WoofList woofArray={searchWoofsResults} />);
+    }
+    return (<div />);
   }
 
   render() {
     const { errorMessage, query, token } = this.state;
-    const {
-      searchResults,
-    } = this.props;
     if (token === undefined) {
       return (<Redirect to="/auth" />);
     }
@@ -44,7 +58,7 @@ class Search extends Component {
           <Typography variant="h5">{query}</Typography>
         </div>
         <div>
-          <UserList userArray={searchResults} />
+          {this.searchResult()}
         </div>
       </div>
     );
@@ -53,15 +67,17 @@ class Search extends Component {
 
 function mapStateToProps(state) {
   return {
-    searchResults: state.searchResults,
+    searchUsersResults: state.searchUsersResults,
+    searchWoofsResults: state.searchWoofsResults,
     query: state.query,
   };
 }
 
 Search.propTypes = {
   cookies: PropTypes.instanceOf(Cookies).isRequired,
-  location: PropTypes.shape.isRequired,
-  searchResults: PropTypes.shape.isRequired,
+  location: PropTypes.shape().isRequired,
+  searchUsersResults: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  searchWoofsResults: PropTypes.arrayOf(PropTypes.shape()).isRequired,
 };
 
 export default connect(mapStateToProps)(withCookies(withRouter(Search)));

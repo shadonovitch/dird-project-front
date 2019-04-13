@@ -72,7 +72,7 @@ class UserCard extends Component {
 UserCard.propTypes = {
   handle: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
-  history: PropTypes.shape.isRequired,
+  history: PropTypes.shape().isRequired,
 };
 
 export default withRouter(UserCard);

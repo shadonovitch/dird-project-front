@@ -27,7 +27,7 @@ const UserView = (props) => {
   };
 
   return (
-    <div style={{ float: 'left' }}>
+    <div style={{ float: 'left', marginLeft: '50px', marginTop: '50px' }}>
       {userImage()}
       <Typography variant="h5">
         {'@'}

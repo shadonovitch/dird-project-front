@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List/List';
 import ListItem from '@material-ui/core/ListItem/ListItem';
+import uniqueid from 'uniqid';
 import UserCard from './UserCard';
 
 const styles = {
@@ -25,8 +26,8 @@ class UserList extends Component {
       <div style={styles.UserList}>
         <List>
           {userArray.map(item => (
-            <ListItem key={item.id}>
-              <UserCard key={item.id} handle={item.handle} email={item.email} />
+            <ListItem key={uniqueid()}>
+              <UserCard key={uniqueid()} handle={item.handle} email={item.email} />
             </ListItem>
           ))}
         </List>

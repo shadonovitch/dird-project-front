@@ -8,8 +8,12 @@ import {
   FETCH_WOOFS_BEGIN,
   FETCH_WOOFS_SUCCESS,
   FETCH_WOOFS_FAILURE,
-  FETCH_SEARCH_BEGIN,
-  FETCH_SEARCH_FAILURE, FETCH_SEARCH_SUCCESS,
+  FETCH_SEARCH_WOOFS_BEGIN,
+  FETCH_SEARCH_WOOFS_FAILURE,
+  FETCH_SEARCH_WOOFS_SUCCESS,
+  FETCH_SEARCH_USERS_BEGIN,
+  FETCH_SEARCH_USERS_SUCCESS,
+  FETCH_SEARCH_USERS_FAILURE,
 } from './actions';
 
 const initialState = {
@@ -17,7 +21,8 @@ const initialState = {
     handle: '',
     email: '',
   },
-  searchResults: [],
+  searchUsersResults: [],
+  searchWoofsResults: [],
   userWoofs: [],
   pictureB64: '',
   loading: false,
@@ -84,18 +89,34 @@ function rootReducer(state = initialState, action) {
         ...state,
         error: action.payload.error,
       };
-    case FETCH_SEARCH_BEGIN:
+    case FETCH_SEARCH_USERS_BEGIN:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case FETCH_SEARCH_SUCCESS:
+    case FETCH_SEARCH_USERS_SUCCESS:
       return {
         ...state,
-        searchResults: action.payload.searchResults,
+        searchUsersResults: action.payload.searchUsersResults,
       };
-    case FETCH_SEARCH_FAILURE:
+    case FETCH_SEARCH_USERS_FAILURE:
+      return {
+        ...state,
+        error: action.payload.error,
+      };
+    case FETCH_SEARCH_WOOFS_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_SEARCH_WOOFS_SUCCESS:
+      return {
+        ...state,
+        searchWoofsResults: action.payload.searchWoofsResults,
+      };
+    case FETCH_SEARCH_WOOFS_FAILURE:
       return {
         ...state,
         error: action.payload.error,
