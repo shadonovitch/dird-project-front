@@ -13,6 +13,7 @@ import EditProfile from './edit/EditProfile';
 import Logout from './common/Logout';
 import Search from './search/Search';
 
+
 const App = () => {
   document.body.style = 'background: darkgray';
   document.title = 'Dird Project';

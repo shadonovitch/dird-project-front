@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField/TextField';
 import Button from '@material-ui/core/Button/Button';
 import store from '../redux/store';
 import { fetchUserWoofs } from '../redux/actions';
@@ -10,6 +9,12 @@ const styles = {
     backgroundColor: '#5b85cc',
     margin: 'auto',
     width: '50%',
+    paddingBottom: '5px',
+    paddingTop: '30px',
+  },
+  woofbox: {
+    backgroundColor: '#b7b7b8',
+    font: 'arial',
   },
 };
 
@@ -43,6 +48,7 @@ class WoofForm extends Component {
       }),
     }).then(() => {
       store.dispatch(fetchUserWoofs(token));
+      this.setState({ woof: '' });
     });
   }
 
@@ -51,7 +57,15 @@ class WoofForm extends Component {
     return (
       <div style={styles.WoofForm}>
         <form onSubmit={this.handleSubmit}>
-          <TextField label="Post a Woof !" type="text" value={woof} onChange={this.handleChangeWoof} />
+          <textarea
+            placeholder="Post a Woof !"
+            value={woof}
+            onChange={this.handleChangeWoof}
+            style={styles.woofbox}
+            rows="4"
+            cols="100"
+          />
+          <br />
           <Button variant="contained" color="secondary" type="submit">
             Submit
           </Button>

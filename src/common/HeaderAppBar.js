@@ -50,7 +50,10 @@ function ButtonAppBar(props) {
                 style: { color: 'white' },
               }}
               onKeyPress={(event) => {
-                if (event.key === 'Enter') history.push(`/search?q=${event.target.value}`);
+                if (event.key === 'Enter') {
+                  const query = event.target.value.replace('#', '%23');
+                  history.push(`/search?q=${query}`);
+                }
               }}
             />
           </div>

@@ -10,9 +10,13 @@ export const FETCH_WOOFS_BEGIN = 'FETCH_WOOFS_BEGIN';
 export const FETCH_WOOFS_SUCCESS = 'FETCH_WOOFS_SUCCESS';
 export const FETCH_WOOFS_FAILURE = 'FETCH_WOOFS_FAILURE';
 
-export const FETCH_SEARCH_BEGIN = 'FETCH_SEARCH_BEGIN';
-export const FETCH_SEARCH_SUCCESS = 'FETCH_SEARCH_SUCCESS';
-export const FETCH_SEARCH_FAILURE = 'FETCH_SEARCH_FAILURE';
+export const FETCH_SEARCH_USERS_BEGIN = 'FETCH_SEARCH_USERS_BEGIN';
+export const FETCH_SEARCH_USERS_SUCCESS = 'FETCH_SEARCH_USERS_SUCCESS';
+export const FETCH_SEARCH_USERS_FAILURE = 'FETCH_SEARCH_USERS_FAILURE';
+
+export const FETCH_SEARCH_WOOFS_BEGIN = 'FETCH_SEARCH_WOOFS_BEGIN';
+export const FETCH_SEARCH_WOOFS_SUCCESS = 'FETCH_SEARCH_WOOFS_SUCCESS';
+export const FETCH_SEARCH_WOOFS_FAILURE = 'FETCH_SEARCH_WOOFS_FAILURE';
 
 export const fetchProfileBegin = () => ({
   type: FETCH_PROFILE_BEGIN,
@@ -56,17 +60,31 @@ export const fetchWoofsFailure = error => ({
   payload: { error },
 });
 
-export const fetchSearchBegin = () => ({
-  type: FETCH_SEARCH_BEGIN,
+export const fetchSearchUsersBegin = () => ({
+  type: FETCH_SEARCH_USERS_BEGIN,
 });
 
-export const fetchSearchSuccess = searchResults => ({
-  type: FETCH_SEARCH_SUCCESS,
-  payload: { searchResults },
+export const fetchSearchUsersSuccess = searchUsersResults => ({
+  type: FETCH_SEARCH_USERS_SUCCESS,
+  payload: { searchUsersResults },
 });
 
-export const fetchSearchFailure = error => ({
-  type: FETCH_SEARCH_FAILURE,
+export const fetchSearchUsersFailure = error => ({
+  type: FETCH_SEARCH_USERS_FAILURE,
+  payload: { error },
+});
+
+export const fetchSearchWoofsBegin = () => ({
+  type: FETCH_SEARCH_WOOFS_BEGIN,
+});
+
+export const fetchSearchWoofsSuccess = searchWoofsResults => ({
+  type: FETCH_SEARCH_WOOFS_SUCCESS,
+  payload: { searchWoofsResults },
+});
+
+export const fetchSearchWoofsFailure = error => ({
+  type: FETCH_SEARCH_WOOFS_FAILURE,
   payload: { error },
 });
 
@@ -126,19 +144,37 @@ export function fetchProfilePicture(token) {
   };
 }
 
-export function fetchSearch(token, query) {
+export function fetchSearchUsers(token, query) {
   return (dispatch) => {
-    dispatch(fetchSearchBegin());
+    dispatch(fetchSearchUsersBegin());
     fetch(`https://dirdapi.chaz.pro/users?handle=${query}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    }).then(response => response.json())
+    })
+      .then(response => response.json())
       .then((responseJson) => {
-        dispatch(fetchSearchSuccess(responseJson));
+        dispatch(fetchSearchUsersSuccess(responseJson));
       })
-      .catch(error => dispatch(fetchSearchFailure(error)));
+      .catch(error => dispatch(fetchSearchUsersFailure(error)));
+  };
+}
+
+export function fetchSearchWoofs(token, query) {
+  return (dispatch) => {
+    dispatch(fetchSearchWoofsBegin());
+    fetch(`https://dirdapi.chaz.pro/findWoofs?hashtag=${query}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then((responseJson) => {
+        dispatch(fetchSearchWoofsSuccess(responseJson));
+      })
+      .catch(error => dispatch(fetchSearchWoofsFailure(error)));
   };
 }
